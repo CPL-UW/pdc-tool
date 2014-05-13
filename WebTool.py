@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = './uploads/'
@@ -37,7 +37,7 @@ def upload():
 			filename = secure_filename(file.filename)
 			print(os.path.join(app.config['UPLOAD_FOLDER']))
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			return redirect(url_for('uploaded_file',filename=filename))
+			return redirect(url_for('output',filename=filename))
 	return '''
 	<!doctype html>
 	<title>Upload new File</title>
