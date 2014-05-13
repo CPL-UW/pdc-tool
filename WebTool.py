@@ -15,9 +15,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
-    return 'Index Page <a href="/upload">UPLOAD</a>'
-    '''TODO: have the index page allow the upload of a json file. After succesful upload, select from list of available functions'''
-
+	#print url_for('analysis')
+	return 'Index Page <a href="/upload">UPLOAD</a>'
+	'''TODO: have the index page allow the upload of a json file. After succesful upload, select from list of available functions'''
+    
 @app.route('/analysis')
 def analysis():
     return 'Choose the analysis to use on the current JSON file'
@@ -65,5 +66,5 @@ def register():
     return 'This is reg'
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
