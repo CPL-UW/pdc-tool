@@ -16,10 +16,15 @@ parser.add_argument('-f', metavar='FILE.json', type=str, help='ADAGE API formatt
 parser.add_argument('--elem', metavar='FIELD', type=str, help='Field in data (e.g., user_id)', nargs='+')
 #TODO parser.add_argument('--usersum', action="store_true", help='numeric field(s) summed over a user_id')
 #TODO parser.add_argument('--totalsum', action="store_true", help='numeric field(s) summed over the entire file')
+
 parser.add_argument('--csvfy', action="store_true", help='turns entire file into CSV (note: 2n for n lines to get all fields)')
+
 parser.add_argument('--userdaytotalcsv', action="store_true", help='create buckets by day csv by user')
+
 parser.add_argument('--heatmap', action="store_true", help='Generates a heat map based on all player click events')
+
 parser.add_argument('--keysums', action="store_true", help='Identifies all unique keys in the given json file and prints their counts to the screen')
+
 parser.add_argument('--keysumsbyplayer', action="store_true", help='Identifies all unique user IDs and keeps a count of the unique keys in the given json file')
 
 args = parser.parse_args()
