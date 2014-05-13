@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/uploads'
+UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = set(['json','txt'])
 
 app = Flask(__name__)
@@ -35,6 +35,7 @@ def upload():
 		file = request.files['file']
 		if file and allowed_file(file.filename):
 			filename = secure_filename(file.filename)
+			print(os.path.join(app.config['UPLOAD_FOLDER']))
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 			return redirect(url_for('uploaded_file',filename=filename))
 	return '''
