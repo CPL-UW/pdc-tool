@@ -4,8 +4,8 @@ import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
 
 '''
-	Copyright 2014, CPL (Adage? Donno)
-	This script was written and maintained by Matthew Berland, Dennis Ramirez (@dennisRamirez)
+	Copyright 2014, CPL
+	This script was written and maintained by Matthew Berland, Dennis Ramirez (@dennisRamirez), Jazmyn Russell
 	This script is provided as is with no other guarantees.
 	Please comment code.
 '''

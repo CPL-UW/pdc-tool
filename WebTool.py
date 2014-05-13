@@ -2,6 +2,13 @@ import os
 from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
+'''
+	Copyright 2014, CPL
+	This script was written and maintained by Dennis Ramirez (@dennisRamirez), Jazmyn Russell
+	This script is provided as is with no other guarantees.
+	Please comment code.
+'''
+
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = set(['json','txt'])
 
@@ -37,7 +44,7 @@ def upload():
 			filename = secure_filename(file.filename)
 			print(os.path.join(app.config['UPLOAD_FOLDER']))
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			return redirect(url_for('output',filename=filename))
+			return redirect(url_for('analysis'))
 	return '''
 	<!doctype html>
 	<title>Upload new File</title>
