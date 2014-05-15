@@ -11,7 +11,6 @@ from mpl_toolkits.mplot3d import Axes3D
 '''
 
 def getKeySums(filename):
-	#print(os.path.join(os.path.dirname(__file__),'uploads/'+filename))
 	output = ''
 	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
 	jdata = json.loads(jfile.read())
