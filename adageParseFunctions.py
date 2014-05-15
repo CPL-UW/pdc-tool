@@ -1,4 +1,4 @@
-import numbers, json, sys, argparse
+import numbers, json, sys, argparse, os
 from collections import defaultdict
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
@@ -10,9 +10,10 @@ from mpl_toolkits.mplot3d import Axes3D
 	Please comment code.
 '''
 
-def getKeySums(filepath):
+def getKeySums(filename):
+	#print(os.path.join(os.path.dirname(__file__),'uploads/'+filename))
 	output = ''
-	jfile = open(filepath,'rb')
+	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
 	jdata = json.loads(jfile.read())
 	key_dict = {}
 	for x in jdata:
@@ -20,6 +21,6 @@ def getKeySums(filepath):
 			key_dict[x["key"]] += 1
 		else:
 			key_dict[x["key"]] = 1
-	output += '\nUnique keys and counts:\n'
 	for y in key_dict.keys():
-		output += y+', '+str(key_dict[y])
+		output += y+', '+str(key_dict[y])+'\n'
+	return output

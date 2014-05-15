@@ -80,8 +80,7 @@ def csvfy(filename):
 def keysums(filename):
 	#f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 	out = getKeySums(filename)
-	print out
-	return 'Output:' + str(out)
+	return '<h1>Unique keys and counts:</h1>'+str(out)+'<a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
     
 @app.route('/register')
 def register():
