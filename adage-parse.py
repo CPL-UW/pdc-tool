@@ -125,6 +125,7 @@ elif args.keysums:
     for y in key_dict.keys():
         print(y+", "+str(key_dict[y]))
 
+
 #Check to see if we have a user Id, if we don't add it and the key to our struct
 #if we do, only check to see if the key is in the struct and increase/set it's count.
 #TODO: Bryan pointed out that we'll be working with a lot of data. Will need rewrite so that
@@ -197,6 +198,20 @@ elif args.heatmap:
     ax.plot3D(x, z, y, 'k.', alpha=.8)
 
     pl.show();
+    
+def keysums(filepath):
+	output = ""
+	jfile = open(filepath,'rb')
+	jdata = json.loads(jfile.read())
+	key_dict = {}
+    for x in data:
+        if x["key"] in key_dict:
+            key_dict[x["key"]] += 1
+        else:
+            key_dict[x["key"]] = 1
+    output += "\nUnique keys and counts:\n")
+    for y in key_dict.keys():
+        output += y+", "+str(key_dict[y])
     
 #TODO - GUI this thing, or interactive command line
 #TODO - Extract logic to functions rather then trigger them on elifs
