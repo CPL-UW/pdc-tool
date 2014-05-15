@@ -24,3 +24,28 @@ def getKeySums(filename):
 	for y in key_dict.keys():
 		output += y+', '+str(key_dict[y])+'\n'
 	return output
+	
+def get_headers(pdata, coldict):
+	header_line = ""
+	for line in pdata:
+		for col in line:
+			coldict[col] = True
+	for col in sorted(coldict):
+		header_line = header_line + col + ','
+	return header_line
+	
+def getCSV(filepath):
+	csvout = ""
+	jfile = open(filepath,'rb')
+	data = json.loads(jfile.read())
+	#find the column headers
+	csvout = csvout + get_headers(data, defaultdict(bool))
+	for line in data:
+		lineout = defaultdict(str)
+        outputlist = []
+        for elem in line:
+            lineout[elem] = line[elem]
+        for col in sorted(columns):
+            outputlist.append(str(lineout[col]))
+        csvout = csvout + "\"",'","'.join(outputlist),"\""
+    return csvout
