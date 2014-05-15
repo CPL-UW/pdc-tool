@@ -1,4 +1,5 @@
 import os
+import adageparse
 from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
@@ -38,7 +39,7 @@ def allowed_file(filename):
 
 @app.route('/analysis/<filename>')
 def analysis(filename):
-    return 'Choose the analysis to use on the current JSON file <a href="'+url_for('csvfy', filename= filename)+'"> CSVFY</a>'
+    return 'Choose the analysis to use on the current JSON file <a href="'+url_for('csvfy', filename= filename)+'">CSVFY</a>'
     '''choose analysis or upload a new file'''
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -71,9 +72,11 @@ def csvfy(filename):
 	# TODO: actually csvfy the file
 	return f
     
-@app.route('/keysums')
-def keysums():
-    return 'Upload Page'
+@app.route('/keysums/<filename>')
+def keysums(filename):
+	f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+	out = adageparse.keysums(f)
+	return out
     
 @app.route('/register')
 def register():
