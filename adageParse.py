@@ -10,6 +10,9 @@ from mpl_toolkits.mplot3d import Axes3D
 	Please comment code.
 '''
 
+#TODO - Extract logic to functions rather then trigger them on elifs. 
+#TODO - If we insist on keeping elifs, please encapsulate the logic as a function in adageParseFunctions.py
+
 # States the feilds that can be parsed by this script
 parser = argparse.ArgumentParser(description='Transform ADAGE formatted raw JSON data.')
 parser.add_argument('-f', metavar='FILE.json', type=str, help='ADAGE API formatted JSON file', required=True)
@@ -198,20 +201,3 @@ elif args.heatmap:
     ax.plot3D(x, z, y, 'k.', alpha=.8)
 
     pl.show();
-    
-def keysums(filepath):
-	output = ""
-	jfile = open(filepath,'rb')
-	jdata = json.loads(jfile.read())
-	key_dict = {}
-    for x in data:
-        if x["key"] in key_dict:
-            key_dict[x["key"]] += 1
-        else:
-            key_dict[x["key"]] = 1
-    output += "\nUnique keys and counts:\n")
-    for y in key_dict.keys():
-        output += y+", "+str(key_dict[y])
-    
-#TODO - GUI this thing, or interactive command line
-#TODO - Extract logic to functions rather then trigger them on elifs

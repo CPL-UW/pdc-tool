@@ -1,5 +1,5 @@
 import os
-import adageparse
+from adageParseFunctions import getKeySums
 from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
@@ -75,7 +75,7 @@ def csvfy(filename):
 @app.route('/keysums/<filename>')
 def keysums(filename):
 	f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-	out = adageparse.keysums(f)
+	out = getKeySums(f)
 	return out
     
 @app.route('/register')
