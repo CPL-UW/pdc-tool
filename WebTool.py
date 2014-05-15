@@ -25,16 +25,21 @@ def index():
 	#print url_for('analysis')
 	return 'Index Page <a href="/upload">UPLOAD</a>'
 	'''TODO: have the index page allow the upload of a json file. After succesful upload, select from list of available functions'''
-    
-@app.route('/analysis')
-def analysis():
-    return 'Choose the analysis to use on the current JSON file'
-    '''choose analysis or upload a new file'''
 
+#NOTE: commented out to avoid namespace collision
+#@app.route('/analysis')
+#def analysis():
+#    return 'Choose the analysis to use on the current JSON file <div class="button"><a href="/csvfy">CSVFY</a></div>'
+#    '''choose analysis or upload a new file'''
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@app.route('/analysis/<filename>')
+def analysis(filename):
+    return 'Choose the analysis to use on the current JSON file <a href="'+url_for('csvfy', filename= filename)+'"> CSVFY</a>'
+    '''choose analysis or upload a new file'''
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -44,7 +49,7 @@ def upload():
 			filename = secure_filename(file.filename)
 			print(os.path.join(app.config['UPLOAD_FOLDER']))
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			return redirect(url_for('analysis'))
+			return redirect(url_for('analysis', filename= filename))
 	return '''
 	<!doctype html>
 	<title>Upload new File</title>
@@ -57,13 +62,14 @@ def upload():
     
 @app.route('/output/<filename>')
 def output(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     '''allows the download of the correct csv file'''
     
-@app.route('/csvfy')
-def csvfy():
-    return 'Upload Page'
+@app.route('/csvfy/<filename>')
+def csvfy(filename):
+	f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+	# TODO: actually csvfy the file
+	return f
     
 @app.route('/keysums')
 def keysums():
