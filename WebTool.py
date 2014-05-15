@@ -39,7 +39,11 @@ def allowed_file(filename):
 
 @app.route('/analysis/<filename>')
 def analysis(filename):
-    return 'Choose the analysis to use on the current JSON file <a href="'+url_for('csvfy', filename= filename)+'">CSVFY</a>'
+    return '''Choose the analysis to use on the current JSON file <br> <ul>
+    <li><a href="'''+url_for('csvfy', filename= filename)+'''">CSVFY</a></li>
+    <li><a href="'''+url_for('keysums', filename= filename)+'''">Get Keword sums</a></li>
+    <li><a href="/upload">Upload new file</a></li>
+    </ul>'''
     '''choose analysis or upload a new file'''
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -74,9 +78,10 @@ def csvfy(filename):
     
 @app.route('/keysums/<filename>')
 def keysums(filename):
-	f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-	out = getKeySums(f)
-	return out
+	#f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+	out = getKeySums(filename)
+	print out
+	return 'Output:' + str(out)
     
 @app.route('/register')
 def register():
