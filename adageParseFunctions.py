@@ -10,6 +10,13 @@ from mpl_toolkits.mplot3d import Axes3D
 	Please comment code.
 '''
 
+#this function is a simple function for first pass csv writing.
+def toCSV(fileName, formattedText):
+	f = open(os.path.join(os.path.dirname(__file__),'outputs/'+fileName), 'w')
+	f.write(formattedText)
+	f.close()
+	print("file saved as "+fileName)
+
 def getKeySums(filename):
 	output = ''
 	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')

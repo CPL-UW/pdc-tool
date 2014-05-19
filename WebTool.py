@@ -1,5 +1,5 @@
-import os
-from adageParseFunctions import getKeySums, getKeySumsByPlayer
+import os, time, datetime
+from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV
 from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
@@ -11,10 +11,12 @@ from werkzeug.utils import secure_filename
 '''
 
 UPLOAD_FOLDER = './uploads/'
+OUTPUT_FOLDER = './outputs/'
 ALLOWED_EXTENSIONS = set(['json','txt'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
 '''	Target date, 5/15/2014
 	TODO: Upload/Download functionality working
@@ -68,7 +70,7 @@ def upload():
     
 @app.route('/output/<filename>')
 def output(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory(app.config['OUTPUT_FOLDER'], filename)
     '''allows the download of the correct csv file'''
     
 @app.route('/csvfy/<filename>')
@@ -81,13 +83,17 @@ def csvfy(filename):
 def keysums(filename):
 	#f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 	out = getKeySums(filename)
-	return '<h1>Unique keys and counts:</h1><pre>'+str(out)+'</pre><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
+	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
+	toCSV(oName, out)
+	return '<h1>Unique keys and counts:</h1><pre>'+str(out)+'</pre><br><a href="'+url_for('output', filename= oName)+'">Download output file</a><br><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
 
 @app.route('/keysumsbyplayer/<filename>')
 def keysumsbyplayer(filename):
 	#f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 	out = getKeySumsByPlayer(filename)
-	return '<h1>Unique keys and counts:</h1><pre>'+str(out)+'</pre><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
+	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
+	toCSV(oName, out)
+	return '<h1>Unique keys and counts:</h1><pre>'+str(out)+'</pre><br><a href="'+url_for('output', filename= oName)+'">Download output file</a><br><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
 
 @app.route('/register')
 def register():
