@@ -1,5 +1,5 @@
 import os
-from adageParseFunctions import getKeySums
+from adageParseFunctions import getKeySums, getKeySumsByPlayer
 from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
@@ -42,6 +42,7 @@ def analysis(filename):
     return '''Choose the analysis to use on the current JSON file <br> <ul>
     <li><a href="'''+url_for('csvfy', filename= filename)+'''">CSVFY</a></li>
     <li><a href="'''+url_for('keysums', filename= filename)+'''">Get Keword sums</a></li>
+    <li><a href="'''+url_for('keysumsbyplayer', filename= filename)+'''">Get Keword sums by player</a></li>
     <li><a href="/upload">Upload new file</a></li>
     </ul>'''
     '''choose analysis or upload a new file'''
@@ -81,7 +82,13 @@ def keysums(filename):
 	#f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 	out = getKeySums(filename)
 	return '<h1>Unique keys and counts:</h1><pre>'+str(out)+'</pre><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
-    
+
+@app.route('/keysumsbyplayer/<filename>')
+def keysumsbyplayer(filename):
+	#f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+	out = getKeySumsByPlayer(filename)
+	return '<h1>Unique keys and counts:</h1><pre>'+str(out)+'</pre><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
+
 @app.route('/register')
 def register():
     return 'This is reg'
