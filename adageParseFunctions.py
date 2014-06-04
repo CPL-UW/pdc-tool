@@ -97,10 +97,12 @@ def plotVar(filename, Key):
 				t1 = float(d["timestamp"])
 				firstTime = True;
 			#since I remove the first timestamp from each sequential we get the delta in ms.
-			x.append((float(d["timestamp"])-t1)/1000/60) #this converts it to minutes
-			y.append(count)
+			y.append((float(d["timestamp"])-t1)/1000/60) #this converts it to minutes
+			x.append(count)
 	pl.clf()
-	pl.plot(x, y, 'ro')
+	pl.plot(x, y) #, 'ro' <- if you want red dots.
+	pl.ylabel(Key)
+	pl.xlabel('Time')
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.png'
 	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+oName)
 	return oName
@@ -119,14 +121,16 @@ def plotVars(filename, Key1, Key2):
 	for d in jdata:
 		if d["key"] == Key1:
 			count1 += 1
-			x.append(count1) #this converts it to minutes
-			y.append(count2)
+			y.append(count1) #this converts it to minutes
+			x.append(count2)
 		elif d["key"] == Key2:
 			count2 += 1
-			x.append(count1) #this converts it to minutes
-			y.append(count2)
+			y.append(count1) #this converts it to minutes
+			x.append(count2)
 	pl.clf()
-	pl.plot(x, y, 'ro')
+	pl.plot(x, y)#, 'ro')
+	pl.ylabel(Key1)
+	pl.xlabel(Key2)
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.png'
 	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+oName)
 	return oName
