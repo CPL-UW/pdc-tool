@@ -76,14 +76,45 @@ def plotVar(filename, Key):
 	x = []
 	y = []
 	z = []
-	count = 0;
+	firstTime = False;
+	count = 0
+	t1 = 0
 	for d in jdata:
 		if d["key"] == Key:
 			count += 1
-			x.append(d["timestamp"])
+			if not(firstTime):
+				t1 = float(d["timestamp"])
+				firstTime = True;
+			#since I remove the first timestamp from each sequential we get the delta in ms.
+			x.append((float(d["timestamp"])-t1)/1000/60) #this converts it to minutes
 			y.append(count)
+	pl.clf()
 	pl.plot(x, y, 'ro')
 	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+"out.png")
+	
+#Functions to Plot
+#assumes timestamp
+def plotVars(filename, Key1, Key2):
+	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
+	jdata = json.loads(jfile.read())
+	x = []
+	y = []
+	z = []
+	firstTime = False;
+	count1 = 0
+	count2 = 0
+	for d in jdata:
+		if d["key"] == Key1:
+			count1 += 1
+			x.append(count1) #this converts it to minutes
+			y.append(count2)
+		elif d["key"] == Key2:
+			count2 += 1
+			x.append(count1) #this converts it to minutes
+			y.append(count2)
+	pl.clf()
+	pl.plot(x, y, 'ro')
+	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+"out2.png")
 
 #functions for converting to CSV	
 def get_headers(pdata, coldict):

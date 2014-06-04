@@ -1,6 +1,6 @@
 import os, time, datetime
-from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV, getCSV, plotVar
-from flask import Flask, request, redirect, url_for, send_from_directory
+from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV, getCSV, plotVar, plotVars
+from flask import Flask, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 
 '''
@@ -21,9 +21,8 @@ app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 @app.route('/')
 def index():
 	#print url_for('analysis')
-	return 'Index Page <a href="/upload">UPLOAD</a>'
-	'''TODO: have the index page allow the upload of a json file. After succesful upload, select from list of available functions'''
-
+	return render_template('index.html')
+	
 #NOTE: commented out to avoid namespace collision
 #@app.route('/analysis')
 #def analysis():
@@ -36,14 +35,7 @@ def allowed_file(filename):
 
 @app.route('/analysis/<filename>')
 def analysis(filename):
-    return '''Choose the analysis to use on the current JSON file <br> <ul>
-    <li><a href="'''+url_for('csvfy', filename= filename)+'''">JSON->CSV</a></li>
-    <li><a href="'''+url_for('keysums', filename= filename)+'''">Get Keword sums</a></li>
-    <li><a href="'''+url_for('keysumsbyplayer', filename= filename)+'''">Get Keword sums by player</a></li>
-    <li><a href="'''+url_for('plotvariable', filename= filename)+'''">get plotvar example</a></li>
-    <li><a href="/upload">Upload new file</a></li>
-    </ul>'''
-    '''choose analysis or upload a new file'''
+    return render_template('analysis.html', filename = filename)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -54,15 +46,7 @@ def upload():
 			print(os.path.join(app.config['UPLOAD_FOLDER']))
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 			return redirect(url_for('analysis', filename= filename))
-	return '''
-	<!doctype html>
-	<title>Upload new File</title>
-	<h1>Upload new File</h1>
-	<form action="" method=post enctype=multipart/form-data>
-	<p><input type=file name=file>
-	<input type=submit value=Upload></p>
-	</form>
-    '''
+	return render_template('upload.html')
     
 @app.route('/output/<filename>')
 def output(filename):
@@ -74,7 +58,9 @@ def csvfy(filename):
 	out = getCSV(filename)
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	toCSV(oName, out)
-	return '<h1>Json -> CSV</h1><pre>Complete</pre><br><a href="'+url_for('output', filename= oName)+'">Download output file</a><br><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
+	title = "Json -> CSV"
+	message = "Json has been converted to CSV"
+	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename)
 
 @app.route('/plotvariable/<filename>')
 def plotvariable(filename):
@@ -83,14 +69,31 @@ def plotvariable(filename):
 	oName = "out.png"
 	#oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	#toCSV(oName, out)
-	return '<h1>Plot Variable</h1><pre>Complete<br><br>'+key+' X timestamp</pre><br><img src="'+url_for('output', filename= oName)+'"><br><a href="'+url_for('output', filename= oName)+'">Download output file</a><br><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
+	title = "Plotting Variable over time"
+	message = key+" X timestamp"
+	return render_template('generalout.html',title = title, message = message, imagePath = oName, outputFilename = oName, filename = filename)
+ 
+@app.route('/plotvariables/<filename>')
+def plotvariables(filename):
+	key = "MakeSpawnFish"
+	key2 = "MakeAddComponent"
+	plotVars(filename,key,key2)
+	oName = "out2.png"
+	#oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
+	#toCSV(oName, out)
+	title = "Plotting Variables"
+	message = key+" X " +key2
+	return render_template('generalout.html',title = title, message = message, imagePath = oName, outputFilename = oName, filename = filename)
+
  
 @app.route('/keysums/<filename>')
 def keysums(filename):
 	out = getKeySums(filename)
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	toCSV(oName, out)
-	return '<h1>Unique keys and counts:</h1><pre>'+str(out)+'</pre><br><a href="'+url_for('output', filename= oName)+'">Download output file</a><br><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
+	title = "Unique Keys and Counts"
+	message = out
+	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename)
 
 @app.route('/keysumsbyplayer/<filename>')
 def keysumsbyplayer(filename):
@@ -98,8 +101,10 @@ def keysumsbyplayer(filename):
 	out = getKeySumsByPlayer(filename)
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	toCSV(oName, out)
-	return '<h1>Unique keys and counts:</h1><pre>'+str(out)+'</pre><br><a href="'+url_for('output', filename= oName)+'">Download output file</a><br><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
-
+	title = "Unique Keys and counts by player"
+	message = out
+	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename)
+	
 @app.route('/register')
 def register():
     return 'This is reg'
