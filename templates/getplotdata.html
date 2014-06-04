@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC 
+  "-//W3C//DTD HTML 4.01//EN"
+  "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+  <HEAD>
+    <TITLE>PDC WebTool</TITLE>
+    <META HTTP-EQUIV="Content-Type" 
+          CONTENT="text/html; charset=utf-8">
+    <link href='http://fonts.googleapis.com/css?family=Metrophobic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+  </HEAD>
+  <BODY>
+	<h1>{{title}}</h1>
+	<br>
+	<pre>{{message}}</pre>
+	
+	{%if keys%}
+	
+	<form action="" method=post>
+		<select name="keyword">
+		{% for k in keys %}
+		<option value="{{k}}">{{k}}</option>
+		{% endfor %}
+		
+		</select>
+		X 
+		{% if twoVars == True%}
+			<select name="keyword2">
+			{% for k in keys %}
+			<option value="{{k}}">{{k}}</option>
+			{% endfor %}
+			</select>
+		{% else %}
+		Time
+		{% endif %}
+	<input type="submit" value="Submit">
+	</form>
+	{% else %}
+		No Keys found in Json file.
+	{% endif %}
+	
+	<br>
+	<a href="/analysis/{{filename}}">More analysis</a>
+	<br><br><br><br>
+  </BODY>
+  <footer>&copy; Play Data 2014 | Follow us on <a href="http://www.twitter.com/LearnPlayData">twitter</a></footer>
+</HTML>

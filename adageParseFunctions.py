@@ -1,4 +1,4 @@
-import numbers, json, sys, argparse, os
+import numbers, json, sys, argparse, os, time, datetime
 from collections import defaultdict
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
@@ -31,6 +31,17 @@ def getKeySums(filename):
 	for y in key_dict.keys():
 		output += y+', '+str(key_dict[y])+'\n'
 	return output
+	
+def getKeys(filename):
+	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
+	jdata = json.loads(jfile.read())
+	key_dict = {}
+	for x in jdata:
+		if x["key"] in key_dict:
+			key_dict[x["key"]] += 1
+		else:
+			key_dict[x["key"]] = 1
+	return key_dict.keys()
 
 #
 def getKeySumsByPlayer(filename):
@@ -90,7 +101,9 @@ def plotVar(filename, Key):
 			y.append(count)
 	pl.clf()
 	pl.plot(x, y, 'ro')
-	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+"out.png")
+	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.png'
+	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+oName)
+	return oName
 	
 #Functions to Plot
 #assumes timestamp
@@ -114,7 +127,9 @@ def plotVars(filename, Key1, Key2):
 			y.append(count2)
 	pl.clf()
 	pl.plot(x, y, 'ro')
-	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+"out2.png")
+	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.png'
+	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+oName)
+	return oName
 
 #functions for converting to CSV	
 def get_headers(pdata, coldict):
