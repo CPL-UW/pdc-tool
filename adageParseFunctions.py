@@ -67,11 +67,25 @@ def getKeySumsByPlayer(filename):
 					csvOut += ",0"
 		csvOut +="\n"
 	return csvOut
-
-
-
-
 	
+#Functions to Plot
+#assumes timestamp
+def plotVar(filename, Key):
+	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
+	jdata = json.loads(jfile.read())
+	x = []
+	y = []
+	z = []
+	count = 0;
+	for d in jdata:
+		if d["key"] == Key:
+			count += 1
+			x.append(d["timestamp"])
+			y.append(count)
+	pl.plot(x, y, 'ro')
+	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+"out.png")
+
+#functions for converting to CSV	
 def get_headers(pdata, coldict):
 	header_line = ""
 	for line in pdata:

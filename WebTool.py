@@ -1,5 +1,5 @@
 import os, time, datetime
-from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV, getCSV
+from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV, getCSV, plotVar
 from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
@@ -17,11 +17,6 @@ ALLOWED_EXTENSIONS = set(['json','txt'])
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
-
-'''	Target date, 5/15/2014
-	TODO: Upload/Download functionality working
-	TODO: Jazmyn gets function for csvfy
-	TODO: Dennis gets function for keysums'''
 
 @app.route('/')
 def index():
@@ -45,6 +40,7 @@ def analysis(filename):
     <li><a href="'''+url_for('csvfy', filename= filename)+'''">JSON->CSV</a></li>
     <li><a href="'''+url_for('keysums', filename= filename)+'''">Get Keword sums</a></li>
     <li><a href="'''+url_for('keysumsbyplayer', filename= filename)+'''">Get Keword sums by player</a></li>
+    <li><a href="'''+url_for('plotvariable', filename= filename)+'''">get plotvar example</a></li>
     <li><a href="/upload">Upload new file</a></li>
     </ul>'''
     '''choose analysis or upload a new file'''
@@ -79,7 +75,16 @@ def csvfy(filename):
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	toCSV(oName, out)
 	return '<h1>Json -> CSV</h1><pre>Complete</pre><br><a href="'+url_for('output', filename= oName)+'">Download output file</a><br><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
-    
+
+@app.route('/plotvariable/<filename>')
+def plotvariable(filename):
+	key = "MakeSpawnFish"
+	plotVar(filename,key)
+	oName = "out.png"
+	#oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
+	#toCSV(oName, out)
+	return '<h1>Plot Variable</h1><pre>Complete<br><br>'+key+' X timestamp</pre><br><img src="'+url_for('output', filename= oName)+'"><br><a href="'+url_for('output', filename= oName)+'">Download output file</a><br><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
+ 
 @app.route('/keysums/<filename>')
 def keysums(filename):
 	out = getKeySums(filename)
