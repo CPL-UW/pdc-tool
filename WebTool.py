@@ -1,5 +1,5 @@
 import os, time, datetime
-from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV
+from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV, getCSV
 from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
@@ -42,7 +42,7 @@ def allowed_file(filename):
 @app.route('/analysis/<filename>')
 def analysis(filename):
     return '''Choose the analysis to use on the current JSON file <br> <ul>
-    <li><a href="'''+url_for('csvfy', filename= filename)+'''">CSVFY</a></li>
+    <li><a href="'''+url_for('csvfy', filename= filename)+'''">JSON->CSV</a></li>
     <li><a href="'''+url_for('keysums', filename= filename)+'''">Get Keword sums</a></li>
     <li><a href="'''+url_for('keysumsbyplayer', filename= filename)+'''">Get Keword sums by player</a></li>
     <li><a href="/upload">Upload new file</a></li>
@@ -75,13 +75,13 @@ def output(filename):
     
 @app.route('/csvfy/<filename>')
 def csvfy(filename):
-	f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-	# TODO: actually csvfy the file
-	return f
+	out = getCSV(filename)
+	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
+	toCSV(oName, out)
+	return '<h1>Json -> CSV</h1><pre>Complete</pre><br><a href="'+url_for('output', filename= oName)+'">Download output file</a><br><a href="'+url_for('analysis', filename= filename)+'">More analysis</a>'
     
 @app.route('/keysums/<filename>')
 def keysums(filename):
-	#f = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 	out = getKeySums(filename)
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	toCSV(oName, out)

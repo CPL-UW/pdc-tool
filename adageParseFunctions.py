@@ -17,6 +17,7 @@ def toCSV(fileName, formattedText):
 	f.close()
 	print("file saved as "+fileName)
 
+
 def getKeySums(filename):
 	output = ''
 	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
@@ -30,7 +31,8 @@ def getKeySums(filename):
 	for y in key_dict.keys():
 		output += y+', '+str(key_dict[y])+'\n'
 	return output
-	
+
+#
 def getKeySumsByPlayer(filename):
 	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
 	jdata = json.loads(jfile.read())
@@ -65,6 +67,10 @@ def getKeySumsByPlayer(filename):
 					csvOut += ",0"
 		csvOut +="\n"
 	return csvOut
+
+
+
+
 	
 def get_headers(pdata, coldict):
 	header_line = ""
@@ -75,12 +81,30 @@ def get_headers(pdata, coldict):
 		header_line = header_line + col + ','
 	return header_line
 
+def find_columns(colsdict, data):
+    for line in data:
+        for col in line:
+            colsdict[col] = True
+
+def print_columns(colsdict, data):
+    for col in sorted(colsdict):
+        print col,',',
+    print ''
+
+def parse_day(daystring):
+    return daystring[:10]
+
 def getCSV(filepath):
-	csvout = ""
 	jfile = open(filepath,'rb')
 	data = json.loads(jfile.read())
-	#find the column headers
-	csvout = csvout + get_headers(data, defaultdict(bool))
+	columns = defaultdict(bool)
+	
+	find_columns(columns, data)
+	csvout = ""
+	for col in sorted(columns):
+		csvout += col + ','
+	csvout += '\n'
+	
 	for line in data:
 		lineout = defaultdict(str)
 		outputlist = []
@@ -88,5 +112,5 @@ def getCSV(filepath):
 			lineout[elem] = line[elem]
 		for col in sorted(columns):
 			outputlist.append(str(lineout[col]))
-		csvout = csvout + "\"",'","'.join(outputlist),"\""
+		csvout += "\""+'","'.join(outputlist)+"\"\n"
 	return csvout
