@@ -1,5 +1,5 @@
 import os, time, datetime
-from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV, getCSV, plotVar, plotVars, getKeys
+from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV, getCSV, plotVar, plotVars, getKeys, keySumsToString
 from flask import Flask, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 
@@ -94,12 +94,13 @@ def plotvariables(filename):
  
 @app.route('/keysums/<filename>')
 def keysums(filename):
-	out = getKeySums(filename)
+	vals = getKeySums(filename)
+	out = keySumsToString(vals)
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	toCSV(oName, out)
 	title = "Unique Keys and Counts"
 	message = out
-	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename)
+	return render_template('generalout2.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename, piechart = True, vals = vals)
 
 @app.route('/keysumsbyplayer/<filename>')
 def keysumsbyplayer(filename):

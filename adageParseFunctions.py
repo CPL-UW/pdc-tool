@@ -19,7 +19,7 @@ def toCSV(fileName, formattedText):
 
 
 def getKeySums(filename):
-	output = ''
+	
 	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
 	jdata = json.loads(jfile.read())
 	key_dict = {}
@@ -28,8 +28,12 @@ def getKeySums(filename):
 			key_dict[x["key"]] += 1
 		else:
 			key_dict[x["key"]] = 1
+	return key_dict
+
+def keySumsToString(key_dict):
+	output = ''
 	for y in key_dict.keys():
-		output += y+', '+str(key_dict[y])+'\n'
+		output += str(y)+', '+str(key_dict[y])+'\n'
 	return output
 	
 def getKeys(filename):
