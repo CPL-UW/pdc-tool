@@ -73,7 +73,7 @@ def plotvariable(filename):
 	else:
 		message = "Choose variable to plot"
 		keys = getKeys(filename)
-		return render_template('getplotdata.html', title = title, message = message, keys = keys, twoVars = False);
+		return render_template('getplotdata.html', title = title, message = message, keys = keys, twoVars = False, filename = filename);
 	#oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	#toCSV(oName, out)
 	
@@ -90,7 +90,7 @@ def plotvariables(filename):
 	else:
 		message = "Choose variables to plot"
 		keys = getKeys(filename)
-		return render_template('getplotdata.html', title = title, message = message, keys = keys, twoVars = True);
+		return render_template('getplotdata.html', title = title, message = message, keys = keys, twoVars = True, filename = filename);
  
 @app.route('/keysums/<filename>')
 def keysums(filename):
@@ -99,7 +99,7 @@ def keysums(filename):
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	toCSV(oName, out)
 	title = "Unique Keys and Counts"
-	message = out
+	message = ""
 	return render_template('generalout2.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename, piechart = True, vals = vals)
 
 @app.route('/keysumsbyplayer/<filename>')

@@ -69,7 +69,7 @@ def getKeySumsByPlayer(filename):
 			key_dict.append(x["key"])
 	
 	for t in key_dict:
-		csvOut += ","+t
+		csvOut += ","+str(t)
 	csvOut += "\n"
 	
 	for y in use_dict.keys():
@@ -94,15 +94,19 @@ def plotVar(filename, Key):
 	firstTime = False;
 	count = 0
 	t1 = 0
+	
+	#sorts by timestamp
+	jdata = sorted(jdata, key=lambda d: d["timestamp"])
+	
 	for d in jdata:
 		if d["key"] == Key:
 			count += 1
 			if not(firstTime):
 				t1 = float(d["timestamp"])
 				firstTime = True;
-			#since I remove the first timestamp from each sequential we get the delta in ms.
-			y.append((float(d["timestamp"])-t1)/1000/60) #this converts it to minutes
-			x.append(count)
+			#since I remove the first timestamp from each sequential we get the delta in seconds.
+			x.append((float(d["timestamp"])-t1)/60) #this converts it to minutes
+			y.append(count)
 	pl.clf()
 	pl.plot(x, y) #, 'ro' <- if you want red dots.
 	pl.ylabel(Key)
@@ -122,6 +126,9 @@ def plotVars(filename, Key1, Key2):
 	firstTime = False;
 	count1 = 0
 	count2 = 0
+	
+	#sorts by timestamp
+	jdata = sorted(jdata, key=lambda d: d["timestamp"])
 	for d in jdata:
 		if d["key"] == Key1:
 			count1 += 1
