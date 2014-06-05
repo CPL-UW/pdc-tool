@@ -1,5 +1,5 @@
 import os, time, datetime
-from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV, getCSV, plotVar, plotVars
+from adageParseFunctions import getKeySums, getKeySumsByPlayer, toCSV, getCSV, plotVar, plotVars, getKeys, keySumsToString
 from flask import Flask, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 
@@ -62,38 +62,45 @@ def csvfy(filename):
 	message = "Json has been converted to CSV"
 	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename)
 
-@app.route('/plotvariable/<filename>')
+@app.route('/plotvariable/<filename>', methods=['GET', 'POST'])
 def plotvariable(filename):
-	key = "MakeSpawnFish"
-	plotVar(filename,key)
-	oName = "out.png"
-	#oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
-	#toCSV(oName, out)
 	title = "Plotting Variable over time"
-	message = key+" X timestamp"
-	return render_template('generalout.html',title = title, message = message, imagePath = oName, outputFilename = oName, filename = filename)
- 
-@app.route('/plotvariables/<filename>')
-def plotvariables(filename):
-	key = "MakeSpawnFish"
-	key2 = "MakeAddComponent"
-	plotVars(filename,key,key2)
-	oName = "out2.png"
+	if request.method == 'POST':
+		key = request.form['keyword']
+		oName = plotVar(filename,key)
+		message = key+" X timestamp"
+		return render_template('generalout.html',title = title, message = message, imagePath = oName, outputFilename = oName, filename = filename)
+	else:
+		message = "Choose variable to plot"
+		keys = getKeys(filename)
+		return render_template('getplotdata.html', title = title, message = message, keys = keys, twoVars = False, filename = filename);
 	#oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	#toCSV(oName, out)
+	
+ 
+@app.route('/plotvariables/<filename>', methods=['GET', 'POST'])
+def plotvariables(filename):
 	title = "Plotting Variables"
-	message = key+" X " +key2
-	return render_template('generalout.html',title = title, message = message, imagePath = oName, outputFilename = oName, filename = filename)
-
+	if request.method == 'POST':
+		key = request.form['keyword']
+		key2 = request.form['keyword2']
+		oName = plotVars(filename,key,key2)
+		message = key+" X " +key2
+		return render_template('generalout.html',title = title, message = message, imagePath = oName, outputFilename = oName, filename = filename)
+	else:
+		message = "Choose variables to plot"
+		keys = getKeys(filename)
+		return render_template('getplotdata.html', title = title, message = message, keys = keys, twoVars = True, filename = filename);
  
 @app.route('/keysums/<filename>')
 def keysums(filename):
-	out = getKeySums(filename)
+	vals = getKeySums(filename)
+	out = keySumsToString(vals)
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	toCSV(oName, out)
 	title = "Unique Keys and Counts"
-	message = out
-	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename)
+	message = ""
+	return render_template('generalout2.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename, piechart = True, vals = vals)
 
 @app.route('/keysumsbyplayer/<filename>')
 def keysumsbyplayer(filename):

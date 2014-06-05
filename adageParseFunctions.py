@@ -1,4 +1,4 @@
-import numbers, json, sys, argparse, os
+import numbers, json, sys, argparse, os, time, datetime
 from collections import defaultdict
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
@@ -19,7 +19,7 @@ def toCSV(fileName, formattedText):
 
 
 def getKeySums(filename):
-	output = ''
+	
 	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
 	jdata = json.loads(jfile.read())
 	key_dict = {}
@@ -28,9 +28,24 @@ def getKeySums(filename):
 			key_dict[x["key"]] += 1
 		else:
 			key_dict[x["key"]] = 1
+	return key_dict
+
+def keySumsToString(key_dict):
+	output = ''
 	for y in key_dict.keys():
-		output += y+', '+str(key_dict[y])+'\n'
+		output += str(y)+', '+str(key_dict[y])+'\n'
 	return output
+	
+def getKeys(filename):
+	jfile = open(os.path.join(os.path.dirname(__file__),'uploads/'+filename),'rb')
+	jdata = json.loads(jfile.read())
+	key_dict = {}
+	for x in jdata:
+		if x["key"] in key_dict:
+			key_dict[x["key"]] += 1
+		else:
+			key_dict[x["key"]] = 1
+	return key_dict.keys()
 
 #
 def getKeySumsByPlayer(filename):
@@ -54,7 +69,7 @@ def getKeySumsByPlayer(filename):
 			key_dict.append(x["key"])
 	
 	for t in key_dict:
-		csvOut += ","+t
+		csvOut += ","+str(t)
 	csvOut += "\n"
 	
 	for y in use_dict.keys():
@@ -79,18 +94,26 @@ def plotVar(filename, Key):
 	firstTime = False;
 	count = 0
 	t1 = 0
+	
+	#sorts by timestamp
+	jdata = sorted(jdata, key=lambda d: d["timestamp"])
+	
 	for d in jdata:
 		if d["key"] == Key:
 			count += 1
 			if not(firstTime):
 				t1 = float(d["timestamp"])
 				firstTime = True;
-			#since I remove the first timestamp from each sequential we get the delta in ms.
-			x.append((float(d["timestamp"])-t1)/1000/60) #this converts it to minutes
+			#since I remove the first timestamp from each sequential we get the delta in seconds.
+			x.append((float(d["timestamp"])-t1)/60) #this converts it to minutes
 			y.append(count)
 	pl.clf()
-	pl.plot(x, y, 'ro')
-	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+"out.png")
+	pl.plot(x, y) #, 'ro' <- if you want red dots.
+	pl.ylabel(Key)
+	pl.xlabel('Time')
+	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.png'
+	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+oName)
+	return oName
 	
 #Functions to Plot
 #assumes timestamp
@@ -103,18 +126,25 @@ def plotVars(filename, Key1, Key2):
 	firstTime = False;
 	count1 = 0
 	count2 = 0
+	
+	#sorts by timestamp
+	jdata = sorted(jdata, key=lambda d: d["timestamp"])
 	for d in jdata:
 		if d["key"] == Key1:
 			count1 += 1
-			x.append(count1) #this converts it to minutes
-			y.append(count2)
+			y.append(count1) #this converts it to minutes
+			x.append(count2)
 		elif d["key"] == Key2:
 			count2 += 1
-			x.append(count1) #this converts it to minutes
-			y.append(count2)
+			y.append(count1) #this converts it to minutes
+			x.append(count2)
 	pl.clf()
-	pl.plot(x, y, 'ro')
-	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+"out2.png")
+	pl.plot(x, y)#, 'ro')
+	pl.ylabel(Key1)
+	pl.xlabel(Key2)
+	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.png'
+	pl.savefig(os.path.join(os.path.dirname(__file__))+'/outputs/'+oName)
+	return oName
 
 #functions for converting to CSV	
 def get_headers(pdata, coldict):
