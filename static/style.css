@@ -36,11 +36,6 @@ header {
 	margin-bottom: -40px;
 }
 
-#right_col header{
-	width: 50%;
-	margin: 0 auto;
-}
-
 .content{
 	padding:25px 50px;
 	border:2px solid;
