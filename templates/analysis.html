@@ -11,8 +11,14 @@
     <link rel="stylesheet" type="text/css" href="/static/style.css">
   </HEAD>
   <BODY>
-	<h1>Choose the analysis</h1><br> <ul>
+	<div class="right_col"><header><h1>Choose the analysis</h1></header> 
+	<center class="content">choose analysis or upload a new file</center>
+	</div>
+	<div class="left_col">
+	<nav>
+		<ul class="action_list">
 	{%if filename%}
+
     	<li><a href="/csvfy/{{filename}}">JSON->CSV</a></li>
     	<li><a href="/keysums/{{filename}}">Get Keword sums</a></li>
     	<li><a href="/keysumsbyplayer/{{filename}}">Get Keword sums by player</a></li>
@@ -20,12 +26,13 @@
     	<li><a href="/plotvariables/{{filename}}">Get Plot Variables example</a></li>
     	<li><a href="/upload">Upload new file</a></li>
     	</ul>
-    	choose analysis or upload a new file
+    </nav>
+    	
     {% else %}
     	I AM ERROR<br>
 		Please return to the <a href = "/uploads">Uploads</a> page to upload a file.
     {% endif %}
-	<br><br><br><br>
+	</div>
   </BODY>
   <footer>&copy; Play Data 2014 | Follow us on <a href="http://www.twitter.com/LearnPlayData">twitter</a></footer>
 </HTML>

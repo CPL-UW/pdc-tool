@@ -1,20 +1,46 @@
 <!DOCTYPE HTML PUBLIC 
-  "-//W3C//DTD HTML 4.01//EN"
-  "http://www.w3.org/TR/html4/strict.dtd">
+	"-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
-  <HEAD>
-    <TITLE>PDC WebTool</TITLE>
-    <META HTTP-EQUIV="Content-Type" 
-          CONTENT="text/html; charset=utf-8">
-<!--    <link href='http://fonts.googleapis.com/css?family=Metrophobic' rel='stylesheet' type='text/css'> -->
-	<link href='http://fonts.googleapis.com/css?family=Roboto:400,500,300,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
-  </HEAD>
-  <BODY>
-	<h1>Welcome to the PDC Tool.</h1>
-	<br>
-	<center><a href = "/upload">Please upload a JSON file to analyze.</a></center>
-	<br><br><br><br>
-  </BODY>
-  <footer>&copy; Play Data 2014 | Follow us on <a href="http://www.twitter.com/LearnPlayData">twitter</a></footer>
+	<HEAD>
+		<TITLE>PDC WebTool</TITLE>
+		<META HTTP-EQUIV="Content-Type" 
+		CONTENT="text/html; charset=utf-8">
+		<link href='http://fonts.googleapis.com/css?family=Roboto:400,500,300,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="/static/style.css">
+	</HEAD>
+	<BODY>	
+		<div class="right_col">
+			<header>
+				<h1>Welcome to the PDC Tool</h1>
+			</header>
+			<div class="content"><a href = "/upload">Please upload a JSON file to analyze.</a></div>
+		</div>
+
+		<div class="left_col">		
+		<nav>
+			<ul class="action_list">
+			{%if filename%}
+				<li><a href="/csvfy/{{filename}}">JSON->CSV</a></li>
+				<li><a href="/keysums/{{filename}}">Get Keword sums</a></li>
+				<li><a href="/keysumsbyplayer/{{filename}}">Get Keword sums by player</a></li>
+				<li><a href="/plotvariable/{{filename}}">Get Plot Variable over time example</a></li>
+				<li><a href="/plotvariables/{{filename}}">Get Plot Variables example</a></li>
+<!--				<li><a href="/upload">Upload new file</a></li> -->
+			</ul>
+			{% else %}
+			<li>JSON->CSV</li>
+			<li>Get Keword sums</li>
+			<li>Get Keword sums by player</li>
+			<li>Get Plot Variable over time example</li>
+			<li>Get Plot Variables example</li>
+<!--			<li><a href="/upload">Upload new file</a></li> -->
+		</ul>
+		{% endif %}
+	</nav>
+	</div>
+</BODY>
+<footer><p>&copy; Play Data 2014 | Follow us on <a href="http://www.twitter.com/LearnPlayData">twitter</a></p>
+<img src="pdc-tool/assets/pdc_logo" alt="PDC" style="float:left;"/>
+</footer>
 </HTML>
