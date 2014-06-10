@@ -35,7 +35,7 @@ def allowed_file(filename):
 
 @app.route('/analysis/<filename>')
 def analysis(filename):
-    return render_template('analysis.html', filename = filename)
+    return render_template('analysis.html', filename = filename, title = "Analysis Menu")
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -60,7 +60,7 @@ def csvfy(filename):
 	toCSV(oName, out)
 	title = "Json -> CSV"
 	message = "Json has been converted to CSV"
-	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename)
+	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename, pad = True)
 
 @app.route('/plotvariable/<filename>', methods=['GET', 'POST'])
 def plotvariable(filename):
@@ -100,7 +100,7 @@ def keysums(filename):
 	toCSV(oName, out)
 	title = "Unique Keys and Counts"
 	message = ""
-	return render_template('generalout2.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename, piechart = True, vals = vals)
+	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename, piechart = True, vals = vals)
 
 @app.route('/keysumsbyplayer/<filename>')
 def keysumsbyplayer(filename):
@@ -109,8 +109,8 @@ def keysumsbyplayer(filename):
 	oName = str(time.mktime(datetime.datetime.now().timetuple()))+'.csv'
 	toCSV(oName, out)
 	title = "Unique Keys and counts by player"
-	message = out
-	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename)
+	message = ""#out  #Out should be what we see, but right now it's unreadable. Fix this.
+	return render_template('generalout.html',title = title, message = message, imagePath = "", outputFilename = oName, filename = filename, pad = True)
 	
 @app.route('/register')
 def register():

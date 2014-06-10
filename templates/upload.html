@@ -1,37 +1,64 @@
 <!DOCTYPE HTML PUBLIC 
-  "-//W3C//DTD HTML 4.01//EN"
-  "http://www.w3.org/TR/html4/strict.dtd">
+	"-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
-  <HEAD>
-    <TITLE>PDC WebTool</TITLE>
-    <META HTTP-EQUIV="Content-Type" 
-          CONTENT="text/html; charset=utf-8">
-<!--    <link href='http://fonts.googleapis.com/css?family=Metrophobic' rel='stylesheet' type='text/css'> -->
-	<link href='http://fonts.googleapis.com/css?family=Roboto:400,500,300,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
-  </HEAD>
-  <BODY>
-	<div class="right_col">
-		<header>
-			<h1>Upload ADAGE JSON file</h1>
-		</header>
-		<div class="content"><center>
-	<form action="" method=post enctype=multipart/form-data>
-	<p><input type=file name=file>
-	<input type=submit value=Upload></p>
-	</form></center></div>
-		</div>
-	<div class="left_col">		
-		<nav>
-			<ul class="action_list">
-				<li>JSON->CSV</li>
-				<li>Get Keword sums</li>
-				<li>Get Keword sums by player</li>
-				<li>Get Plot Variable over time example</li>
-				<li>Get Plot Variables example</li>
-			</ul>
-		</nav>
+	<HEAD>
+		<TITLE>PDC WebTool</TITLE>
+		<META HTTP-EQUIV="Content-Type" 
+		CONTENT="text/html; charset=utf-8">
+		<link href='http://fonts.googleapis.com/css?family=Roboto:400,500,300,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="/static/temp.css">
+	</HEAD>
+	<BODY>	
+	<div id="container">
+	<div id="header">
+		<h1>
+			<img src = "/static/pdc_logo_icon.png">Welcome to the PDC WebTool
+		</h1>
 	</div>
-  </BODY>
-  <footer>&copy; Play Data 2014 | Follow us on <a href="http://www.twitter.com/LearnPlayData">twitter</a></footer>
+	<div id="navigation">
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/upload">Upload new file</a></li>
+			{%if filename%}
+				<li><a href="/csvfy/{{filename}}">JSON->CSV</a></li>
+			{% endif %}
+			</ul>
+		</ul>
+	</div>
+	<div id="content-container">
+		<div id="content">
+			<h2>
+				{{title}}
+			</h2>
+			<p>
+				<center>
+				<form action="" method=post enctype=multipart/form-data>
+				<p><input type=file name=file>
+				<input type=submit value=Upload></p>
+				</form>
+				</center>
+			</p>
+		</div>
+		<div id="aside">
+			<h3>
+				Analysis
+			</h3>
+			{%if filename%}
+				<ul>
+				<li><a href="/keysums/{{filename}}">Get Keword sums</a></li>
+				<li><a href="/keysumsbyplayer/{{filename}}">Get Keword sums by player</a></li>
+				<li><a href="/plotvariable/{{filename}}">Get Plot Variable X Time</a></li>
+				<li><a href="/plotvariables/{{filename}}">Get Plot Variables X Variable</a></li>
+				</ul>
+			{% else %}
+				Please <a href="/upload">Upload</a> a file to begin.
+			{% endif %}
+		</div>
+		<div id="footer">
+			Copyright © PDC | Follow us on <a href="http://www.twitter.com/LearnPlayData">twitter</a>
+		</div>
+	</div>
+</div>
+</BODY>
 </HTML>

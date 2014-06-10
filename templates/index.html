@@ -7,43 +7,53 @@
 		<META HTTP-EQUIV="Content-Type" 
 		CONTENT="text/html; charset=utf-8">
 		<link href='http://fonts.googleapis.com/css?family=Roboto:400,500,300,700' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" type="text/css" href="/static/style.css">
+		<link rel="stylesheet" type="text/css" href="/static/temp.css">
 	</HEAD>
 	<BODY>	
-		<div class="right_col">
-			<header>
-				<h1>Welcome to the PDC Tool</h1>
-
-			</header>
-			<img class="logo" src="/static/pdc_logo.png" alt="PDC" />
-			<div class="content"><a href = "/upload">Please upload a JSON file to analyze.</a></div>
-		</div>
-
-		<div class="left_col">		
-		<nav>
-			<ul class="action_list">
+	<div id="container">
+	<div id="header">
+		<h1>
+			<img src = "/static/pdc_logo_icon.png">PDC WebTool
+		</h1>
+	</div>
+	<div id="navigation">
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/upload">Upload new file</a></li>
 			{%if filename%}
 				<li><a href="/csvfy/{{filename}}">JSON->CSV</a></li>
+			{% endif %}
+			</ul>
+		</ul>
+	</div>
+	<div id="content-container">
+		<div id="content">
+			<h2>
+				Welcome to the PDC WebTool
+			</h2>
+			<p>
+				Play Data Consortium (PDC), funded by the National Science Foundation, is a national consortium focused on building a research community and infrastructure for learning analytics in digital games for learning. Organized by the Games+Learning+Society Center at the University of Wisconsin-Madison, the PDC connects leaders in academia, learning games, and education. The PDC is engaged in co-developing common formats for play data, creating new tools for analysis, and helping people use data meaningfully. The PI and director of the Play Data Consortium is Matthew Berland of UW-Madison, working with Co-PIs Rich Halverson, Kurt Squire, and David Krakauer.
+			</p>
+		</div>
+		<div id="aside">
+			<h3>
+				Analysis
+			</h3>
+			{%if filename%}
+				<ul>
 				<li><a href="/keysums/{{filename}}">Get Keword sums</a></li>
 				<li><a href="/keysumsbyplayer/{{filename}}">Get Keword sums by player</a></li>
-				<li><a href="/plotvariable/{{filename}}">Get Plot Variable over time example</a></li>
-				<li><a href="/plotvariables/{{filename}}">Get Plot Variables example</a></li>
-<!--				<li><a href="/upload">Upload new file</a></li> -->
-			</ul>
+				<li><a href="/plotvariable/{{filename}}">Get Plot Variable X Time</a></li>
+				<li><a href="/plotvariables/{{filename}}">Get Plot Variables X Variable</a></li>
+				</ul>
 			{% else %}
-			<li>JSON->CSV</li>
-			<li>Get Keword sums</li>
-			<li>Get Keword sums by player</li>
-			<li>Get Plot Variable over time example</li>
-			<li>Get Plot Variables example</li>
-<!--			<li><a href="/upload">Upload new file</a></li> -->
-		</ul>
-		{% endif %}
-	</nav>
+				Please <a href="/upload">Upload</a> a file to begin.
+			{% endif %}
+		</div>
+		<div id="footer">
+			Copyright © PDC | Follow us on <a href="http://www.twitter.com/LearnPlayData">twitter</a>
+		</div>
 	</div>
+</div>
 </BODY>
-<footer><p>&copy; Play Data 2014 | Follow us on <a href="http://www.twitter.com/LearnPlayData">twitter</a>
-</p>
-
-</footer>
 </HTML>
