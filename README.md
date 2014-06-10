@@ -11,7 +11,9 @@ To use the PDC Web Tool, first, clone the repository to your machine. In Termina
 $ python WebTool.py
 ```
 
-Open a web browser and go to either `localhost:5000` or `127.0.0.1:5000`.
+Open a web browser and go to either [`localhost:5000`][1] or [`127.0.0.1:5000`][2].
 
 The Play Data Consortium, funded by the National Science Foundation, is a national consortium focused on building a research community and infrastructure for learning analytics in digital games for learning. Organized by the Games+Learning+Society Center at the University of Wisconsin-Madison, the PDC connects leaders in academia, learning games, and education. The PDC is engaged in co-developing common formats for play data, creating new tools for analysis, and helping people use data meaningfully. The PI and director of the Play Data Consortium is Matthew Berland of UW-Madison, working with Co-PIs Rich Halverson, Kurt Squire, and David Krakauer.
 
+[1]: localhost:5000
+[2]: 127.0.0.1:5000
